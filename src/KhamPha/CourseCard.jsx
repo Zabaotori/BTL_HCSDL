@@ -23,6 +23,14 @@ const CourseCard = ({ course }) => {
       <div className="mb-3">
         <Rating rating={course.rating} reviews={course.reviews} />
       </div>
+
+      <button
+        type="button"
+        class="btn bg-cyan-400 p-2 rounded cursor-pointer border border-cyan-700 hover:bg-cyan-600 hover:text-gray-200"
+      >
+        Đăng ký khoá học
+      </button>
+      
       
     </div>
   );

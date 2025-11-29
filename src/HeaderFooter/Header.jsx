@@ -15,7 +15,7 @@ const Header = () => {
             <header className="w-full bg-cyan-600 text-white px-6 py-3 flex items-center justify-between shadow">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-3">
-                        <NavLink to={'/header'}>
+                        <NavLink to={'/student'}>
                             <img
                             src="https://hcmut.edu.vn/img/nhanDienThuongHieu/01_logobachkhoatoi.png"
                             alt="HCMUT Logo"
@@ -33,10 +33,10 @@ const Header = () => {
                     </div>
 
                     <nav className="flex items-center gap-1 text-sm">
-                        <NavLink to="/header" end className={navLinkClass}>
+                        <NavLink to="/student" end className={navLinkClass}>
                             Khám phá
                         </NavLink>
-                        <NavLink to="/header" className={navLinkClass}>
+                        <NavLink to="/student/myCourse" className={navLinkClass}>
                             Khoá học của tôi
                         </NavLink>
                         {/* <NavLink to="/student/lichcuatoi" className={navLinkClass}>

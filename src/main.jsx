@@ -6,18 +6,23 @@ import Login from './LogIn/LogIn.jsx'
 import Header from './HeaderFooter/Header.jsx'
 import KhamPha from './KhamPha/KhamPha.jsx'
 import CourseParam from './CourseParam.jsx'
+import MyCourse from './MyCourse/MyCourse.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="login" element={<Login />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
 
-          <Route path='/header' element={<Header></Header>}>
+          <Route path='/student' element={<Header></Header>}>
             <Route index element={<KhamPha></KhamPha>}></Route>
-            <Route path='courseParam' element={<CourseParam></CourseParam>}></Route>
+            <Route path='courseParam' element={<CourseParam></CourseParam>}>
+            </Route>
+            <Route path='myCourse' element={<MyCourse></MyCourse>}></Route>
+
           </Route>
+
 
       </Routes>
     </BrowserRouter>
