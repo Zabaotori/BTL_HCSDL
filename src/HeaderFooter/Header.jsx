@@ -70,13 +70,10 @@ const Header = () => {
                             className="w-9 h-9 rounded-full border border-white/60 object-cover"
                         />
                         <div className="hidden sm:block text-xs leading-tight">
-<<<<<<< HEAD
                             <div className="font-semibold">{name}</div>
                             <div className="text-cyan-100">{role}</div>
-=======
                             <div className="font-semibold">Tên</div>
                             <div className="text-cyan-100">{isTeacher ? 'Giáo viên' : 'Học sinh'}</div>
->>>>>>> be82507719c54a01188b3f89a822a5e7604722eb
                         </div>
                     </div>
 
