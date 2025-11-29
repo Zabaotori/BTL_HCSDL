@@ -34,6 +34,8 @@ const Login = () => {
       navigate("/student");
     } else if (res.data.role === "Tutor") {
       navigate("/tutor");
+    } else if (res.data.role === "tutor") {
+      navigate("/instructor");
     }
   } catch (err) {
     console.log(err);
