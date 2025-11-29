@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import FilterBar from './FilterBar';
-import { courses } from '../data/courses.js';
+// import { courses } from '../data/courses.js';
 import CourseCard from './CourseCard.jsx';
+import axios from 'axios';
 
 function KhamPha() {
+  const [courses, setCourses] = useState([])
   const [filters, setFilters] = useState({
     category: 'Tất cả',
     level: 'all',
@@ -12,19 +14,23 @@ function KhamPha() {
   });
   const [viewMode, setViewMode] = useState('grid');
 
-  // Filter courses
-  const filteredCourses = useMemo(() => {
-    return courses.recommended.filter(course => {
-      const matchesCategory = filters.category === 'Tất cả' || course.category === filters.category;
-      const matchesLevel = filters.level === 'all' || course.level === filters.level;
-      const matchesRating = !filters.rating || course.rating >= parseFloat(filters.rating);
-      const matchesSearch = !filters.search || 
-        course.title.toLowerCase().includes(filters.search.toLowerCase()) ||
-        course.instructor.toLowerCase().includes(filters.search.toLowerCase());
+  const getAllCourse = async() => {
+    try {
+      let res = await axios({
+        url: `http://localhost:8080/api/courses`,
+        method: `GET`
+      })
+      console.log(res.data);
+      setCourses(res.data);
+    }
+    catch (err) {
+      console.log(err);
+    }
+  } 
 
-      return matchesCategory && matchesLevel && matchesRating && matchesSearch;
-    });
-  }, [filters]);
+  useEffect(()=>{
+    getAllCourse();
+  }, [])
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -34,20 +40,20 @@ function KhamPha() {
           onFilterChange={setFilters}
           onViewModeChange={setViewMode}
           viewMode={viewMode}
-          totalCourses={filteredCourses.length}
+          totalCourses={courses?.length}
         />
 
         {/* Course Sections */}
         <div className="mb-8">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Được đề xuất cho bạn</h2>
           <div className={`grid grid-cols-1 ${viewMode === 'grid' ? 'md:grid-cols-2 xl:grid-cols-3' : ''} gap-6`}>
-            {filteredCourses.map((course) => (
+            {courses?.map((course) => (
               <CourseCard key={course.id} course={course} />
             ))}
           </div>
         </div>
 
-        {filteredCourses.length === 0 && (
+        {courses?.length === 0 && (
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">🔍</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Không tìm thấy khóa học</h3>

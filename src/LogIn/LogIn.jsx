@@ -30,9 +30,9 @@ const Login = () => {
     localStorage.setItem("name", res.data.name);
 
     // Điều hướng theo role
-    if (res.data.role === "student") {
+    if (res.data.role === "Student") {
       navigate("/student");
-    } else if (res.data.role === "tutor") {
+    } else if (res.data.role === "Tutor") {
       navigate("/tutor");
     }
   } catch (err) {

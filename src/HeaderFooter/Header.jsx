@@ -5,7 +5,9 @@ import axios from "axios";
 import Footer from "./Footer.jsx";
 
 const Header = () => {
-    const navigate = useNavigate();
+    const id = localStorage.getItem('id');
+    const name = localStorage.getItem('name')
+    const role = localStorage.getItem('role')
     const navLinkClass = ({ isActive }) =>
         `px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition
      ${isActive ? "bg-white/20" : "hover:bg-cyan-600"}`;
@@ -56,8 +58,8 @@ const Header = () => {
                             className="w-9 h-9 rounded-full border border-white/60 object-cover"
                         />
                         <div className="hidden sm:block text-xs leading-tight">
-                            <div className="font-semibold">Tên</div>
-                            <div className="text-cyan-100">Vai trò</div>
+                            <div className="font-semibold">{name}</div>
+                            <div className="text-cyan-100">{role}</div>
                         </div>
                     </div>
 

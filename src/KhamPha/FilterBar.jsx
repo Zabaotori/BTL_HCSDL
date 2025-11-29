@@ -56,19 +56,6 @@ const FilterBar = ({
         {/* Filter Dropdowns */}
         <div className="flex flex-wrap gap-3 w-full lg:w-auto">
 
-          {/* Level Filter */}
-          <select
-            value={filters.level}
-            onChange={(e) => handleFilterChange('level', e.target.value)}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors min-w-[150px]"
-          >
-            {levels.map(level => (
-              <option key={level.value} value={level.value}>
-                {level.label}
-              </option>
-            ))}
-          </select>
-
           {/* Rating Filter */}
           <select
             value={filters.rating}
