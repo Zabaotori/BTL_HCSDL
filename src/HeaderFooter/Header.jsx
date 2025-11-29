@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { Bell, MessageCircle } from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import Footer from "./Footer.jsx";
 
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    
+    // Xác định role dựa trên path
+    const isTeacher = location.pathname.startsWith('/teacher');
+    const homeLink = isTeacher ? '/teacher' : '/student';
+    
     const navLinkClass = ({ isActive }) =>
         `px-3 py-2 text-sm font-medium rounded-md cursor-pointer transition
      ${isActive ? "bg-white/20" : "hover:bg-cyan-600"}`;
@@ -15,7 +21,7 @@ const Header = () => {
             <header className="w-full bg-cyan-600 text-white px-6 py-3 flex items-center justify-between shadow">
                 <div className="flex items-center gap-6">
                     <div className="flex items-center gap-3">
-                        <NavLink to={'/student'}>
+                        <NavLink to={homeLink}>
                             <img
                             src="https://hcmut.edu.vn/img/nhanDienThuongHieu/01_logobachkhoatoi.png"
                             alt="HCMUT Logo"
@@ -33,18 +39,24 @@ const Header = () => {
                     </div>
 
                     <nav className="flex items-center gap-1 text-sm">
-                        <NavLink to="/student" end className={navLinkClass}>
-                            Khám phá
-                        </NavLink>
-                        <NavLink to="/student/myCourse" className={navLinkClass}>
-                            Khoá học của tôi
-                        </NavLink>
-                        {/* <NavLink to="/student/lichcuatoi" className={navLinkClass}>
-                            Lịch của tôi
-                        </NavLink>
-                        <NavLink to="/student/giangvien" className={navLinkClass}>
-                            Giảng viên
-                        </NavLink> */}
+                        {isTeacher ? (
+                            // Menu cho giáo viên
+                            <>
+                                <NavLink to="/teacher" end className={navLinkClass}>
+                                    Khóa học của tôi
+                                </NavLink>
+                            </>
+                        ) : (
+                            // Menu cho học sinh
+                            <>
+                                <NavLink to="/student" end className={navLinkClass}>
+                                    Khám phá
+                                </NavLink>
+                                <NavLink to="/student/myCourse" className={navLinkClass}>
+                                    Khoá học của tôi
+                                </NavLink>
+                            </>
+                        )}
                     </nav>
                 </div>
 
@@ -57,7 +69,7 @@ const Header = () => {
                         />
                         <div className="hidden sm:block text-xs leading-tight">
                             <div className="font-semibold">Tên</div>
-                            <div className="text-cyan-100">Vai trò</div>
+                            <div className="text-cyan-100">{isTeacher ? 'Giáo viên' : 'Học sinh'}</div>
                         </div>
                     </div>
 
