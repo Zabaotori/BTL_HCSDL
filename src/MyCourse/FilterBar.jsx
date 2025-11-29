@@ -2,13 +2,7 @@ import React from 'react';
 import { Search, Filter, Grid, List } from 'lucide-react';
 
 const FilterBar = ({ 
-  categories, 
-  statusFilters, 
-  selectedCategory, 
-  selectedStatus,
   viewMode,
-  onCategoryChange,
-  onStatusChange,
   onViewModeChange,
   onSearch 
 }) => {
@@ -30,31 +24,6 @@ const FilterBar = ({
 
         {/* Filters */}
         <div className="flex flex-wrap gap-3 items-center">
-          {/* Category Filter */}
-          {/* <select
-            value={selectedCategory}
-            onChange={(e) => onCategoryChange(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-          >
-            {categories.map(category => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select> */}
-
-          {/* Status Filter */}
-          {/* <select
-            value={selectedStatus}
-            onChange={(e) => onStatusChange(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-          >
-            {statusFilters.map(filter => (
-              <option key={filter.value} value={filter.value}>
-                {filter.label}
-              </option>
-            ))}
-          </select> */}
 
           {/* View Mode Toggle */}
           <div className="flex border border-gray-300 rounded-lg overflow-hidden">

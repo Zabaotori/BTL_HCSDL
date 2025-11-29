@@ -24,10 +24,10 @@ const Header = () => {
                         </NavLink>
                         <div className="hidden sm:block">
                             <div className="text-xs uppercase tracking-wide text-cyan-100">
-                                HCMUT Consultation System
+                                HCMUT Learning System
                             </div>
                             <div className="text-sm font-semibold">
-                                Hệ thống tư vấn học tập
+                                Hệ thống học tập
                             </div>
                         </div>
                     </div>

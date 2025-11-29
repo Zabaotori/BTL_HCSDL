@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Sidebar from './ParamCourse/Sidebar.jsx';
-import VideoPlayer from './ParamCourse/VideoPlayer.jsx';
-import Quiz from './ParamCourse/Quiz.jsx';
-import { courseData } from './data/courseData.js';
+import Sidebar from './Sidebar.jsx';
+import VideoPlayer from './VideoPlayer.jsx';
+import Quiz from './Quiz.jsx';
+import { courseData } from '../data/courseData.js';
 
 function CourseParam() {
   const [currentLesson, setCurrentLesson] = useState(courseData.chapters[0].lessons[0]);

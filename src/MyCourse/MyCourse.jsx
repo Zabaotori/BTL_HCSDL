@@ -49,13 +49,7 @@ function MyCourse() {
 
         {/* Filter Bar */}
         <FilterBar
-          categories={categories}
-          statusFilters={statusFilters}
-          selectedCategory={selectedCategory}
-          selectedStatus={selectedStatus}
           viewMode={viewMode}
-          onCategoryChange={setSelectedCategory}
-          onStatusChange={setSelectedStatus}
           onViewModeChange={setViewMode}
           onSearch={setSearchTerm}
         />

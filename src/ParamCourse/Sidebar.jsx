@@ -21,9 +21,7 @@ const Sidebar = ({
     if (lesson.type === 'quiz') {
       return <FileQuestion size={16} className="text-purple-500" />;
     }
-    return lesson.completed ? 
-      <CheckCircle2 size={16} className="text-green-500" /> : 
-      <PlayCircle size={16} className="text-blue-500" />;
+    return <PlayCircle size={16} className="text-green-500" />;
   };
 
   return (
@@ -83,9 +81,6 @@ const Sidebar = ({
                         )}
                       </div>
                     </div>
-                    {lesson.completed && lesson.type !== 'quiz' && (
-                      <CheckCircle2 size={16} className="text-green-500 shrink-0" />
-                    )}
                   </div>
                 ))}
               </div>

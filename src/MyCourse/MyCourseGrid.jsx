@@ -33,14 +33,6 @@ const MyCourseGrid = ({
                     <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded">
                       {course.category}
                     </span>
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      course.status === 'completed' ? 'bg-green-100 text-green-800' :
-                      course.status === 'in-progress' ? 'bg-blue-100 text-blue-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
-                      {course.status === 'completed' ? 'Đã hoàn thành' :
-                       course.status === 'in-progress' ? 'Đang học' : 'Chưa bắt đầu'}
-                    </span>
                   </div>
                   <div className="flex items-center gap-1 text-sm text-gray-600">
                     <Star size={14} className="text-yellow-400 fill-current" />
@@ -59,11 +51,9 @@ const MyCourseGrid = ({
               
               <div className="flex flex-col gap-2">
                 <button 
-                  onClick={() => onContinue(course.id)}
-                  className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm whitespace-nowrap"
+                  className="bg-blue-600 cursor-pointer text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm whitespace-nowrap"
                 >
-                  {course.status === 'not-started' ? 'Bắt đầu học' :
-                   course.status === 'completed' ? 'Xem lại' : 'Tiếp tục học'}
+                  Học
                 </button>
               </div>
             </div>
