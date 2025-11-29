@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import CourseSection from './CourseSection';
 import FilterBar from './FilterBar';
 import { courses } from '../data/courses.js';
 import CourseCard from './CourseCard.jsx';
