@@ -26,16 +26,14 @@ const Login = () => {
 
     // Lưu thông tin người dùng
     localStorage.setItem("role", res.data.role);
-    localStorage.setItem("userId", res.data.userId);
+    localStorage.setItem("id", res.data.id);
     localStorage.setItem("name", res.data.name);
 
     // Điều hướng theo role
     if (res.data.role === "Student") {
       navigate("/student");
-    } else if (res.data.role === "Tutor") {
-      navigate("/tutor");
-    } else if (res.data.role === "tutor") {
-      navigate("/instructor");
+    } else if (res.data.role === "Instructor") {
+      navigate("/teacher");
     }
   } catch (err) {
     console.log(err);

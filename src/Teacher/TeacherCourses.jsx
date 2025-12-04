@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Users, Clock, Eye } from 'lucide-react';
+import { BookOpen, Users, Eye, Calendar, Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -9,8 +9,8 @@ const TeacherCourses = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // TODO: Thay instructorId bằng ID thực từ session/login
-  const instructorId = 1;
+  // Lấy instructorId từ localStorage
+  const instructorId = localStorage.getItem('id') || 12;
 
   useEffect(() => {
     fetchCourses();
@@ -18,65 +18,61 @@ const TeacherCourses = () => {
 
   const fetchCourses = async () => {
     try {
-      // TODO Backend: Cần tạo API GET /api/instructors/{instructorId}/courses
-      // API này nên trả về:
-      // [
-      //   {
-      //     courseId: number,
-      //     title: string,
-      //     description: string,
-      //     publishedDate: string,
-      //     instructorId: number,
-      //     instructorName: string,
-      //     totalStudents: number (count từ Enrollment),
-      //     totalSections: number (count từ Section),
-      //     totalLessons: number (count từ Lesson),
-      //     categories: string[] (từ Category table)
-      //   }
-      // ]
-      // const response = await axios.get(`/api/instructors/${instructorId}/courses`);
-      // setCourses(response.data);
+      const response = await axios.get(`http://localhost:8080/api/courses/user/${instructorId}`, {
+        params: { role: 'instructor' }
+      });
       
-      // Mock data tạm (dựa trên schema của database)
-      setCourses([
-        {
-          courseId: 1,
-          title: "Java Spring Boot - Từ Cơ Bản Đến Nâng Cao",
-          description: "Khóa học toàn diện về Spring Boot, bao gồm REST API, JPA, Security",
-          thumbnail: "https://dummyimage.com/600x400/3b82f6/ffffff&text=Spring+Boot",
-          totalStudents: 150,
-          totalLessons: 45,
-          totalChapters: 8,
-          duration: "40 giờ",
-          category: "Backend Development"
-        },
-        {
-          courseId: 4,
-          title: "React JS - Xây Dựng Ứng Dụng Web Hiện Đại",
-          description: "Học React từ đầu, bao gồm Hooks, Redux, Router",
-          thumbnail: "https://dummyimage.com/600x400/10b981/ffffff&text=React",
-          totalStudents: 89,
-          totalLessons: 32,
-          totalChapters: 6,
-          duration: "28 giờ",
-          category: "Frontend Development"
-        }
-      ]);
+      setCourses(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching courses:', error);
+      setCourses([]);
       setLoading(false);
     }
   };
 
   const filteredCourses = courses.filter(course =>
-    course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    course.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Format date
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN');
+  };
+
+  // Tạo màu nền dựa trên courseId - giống với CourseCard
+  const getBackgroundColor = (id) => {
+    const colors = [
+      'bg-gradient-to-br from-blue-400 to-blue-500',
+      'bg-gradient-to-br from-green-400 to-green-500',
+      'bg-gradient-to-br from-purple-400 to-purple-500',
+      'bg-gradient-to-br from-orange-400 to-orange-500',
+      'bg-gradient-to-br from-teal-400 to-teal-500',
+      'bg-gradient-to-br from-red-400 to-red-500',
+      'bg-gradient-to-br from-indigo-400 to-indigo-500',
+      'bg-gradient-to-br from-pink-400 to-pink-500'
+    ];
+    return colors[id % colors.length];
+  };
+
+  // Lấy icon theo loại khóa học - giống với CourseCard
+  const getCourseIcon = (title) => {
+    const lowerTitle = title.toLowerCase();
+    if (lowerTitle.includes('sql')) return '📊';
+    if (lowerTitle.includes('java')) return '☕';
+    if (lowerTitle.includes('python')) return '🐍';
+    if (lowerTitle.includes('react') || lowerTitle.includes('javascript')) return '⚛️';
+    if (lowerTitle.includes('html') || lowerTitle.includes('css')) return '🌐';
+    if (lowerTitle.includes('c#')) return '🔷';
+    return '📚';
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-gray-500">Đang tải...</div>
+        <div className="text-gray-500">Đang tải khóa học...</div>
       </div>
     );
   }
@@ -92,47 +88,15 @@ const TeacherCourses = () => {
 
         {/* Search Bar */}
         <div className="mb-6">
-          <input
-            type="text"
-            placeholder="Tìm kiếm khóa học..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
-          />
-        </div>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Tổng khóa học</p>
-                <p className="text-2xl font-bold text-gray-900">{courses.length}</p>
-              </div>
-              <BookOpen className="text-cyan-600" size={32} />
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Tổng học viên</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {courses.reduce((sum, course) => sum + course.totalStudents, 0)}
-                </p>
-              </div>
-              <Users className="text-green-600" size={32} />
-            </div>
-          </div>
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600 text-sm">Tổng bài học</p>
-                <p className="text-2xl font-bold text-gray-900">
-                  {courses.reduce((sum, course) => sum + course.totalLessons, 0)}
-                </p>
-              </div>
-              <Clock className="text-blue-600" size={32} />
-            </div>
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <input
+              type="text"
+              placeholder="Tìm kiếm khóa học theo tiêu đề hoặc mô tả..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent transition-all duration-300"
+            />
           </div>
         </div>
 
@@ -141,46 +105,54 @@ const TeacherCourses = () => {
           {filteredCourses.map((course) => (
             <div
               key={course.courseId}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+              className="bg-white rounded-xl shadow-lg font-bold border border-gray-300 hover:shadow-xl transition-all duration-300 overflow-hidden group hover:-translate-y-1 cursor-pointer"
               onClick={() => navigate(`/teacher/course/${course.courseId}`)}
             >
-              <img
-                src={course.thumbnail}
-                alt={course.title}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <span className="inline-block bg-cyan-100 text-cyan-800 text-xs font-medium px-2 py-1 rounded mb-2">
-                  {course.category}
-                </span>
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
-                  {course.title}
-                </h3>
-                <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+              {/* Header với icon và màu nền - giống với CourseCard */}
+              <div className={`${getBackgroundColor(course.courseId)} h-32 relative overflow-hidden`}>
+                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute top-4 left-4">
+                  <span className="bg-white/90 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+                    {getCourseIcon(course.title)}
+                    <span>{course.category || 'Lập trình'}</span>
+                  </span>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-white font-bold text-lg line-clamp-2 drop-shadow-md">
+                    {course.title}
+                  </h3>
+                </div>
+              </div>
+
+              <div className="p-5">
+                {/* Mô tả khóa học */}
+                <p className="text-gray-600 text-sm mb-4 line-clamp-2 h-12">
                   {course.description}
                 </p>
 
-                {/* Stats */}
-                <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
-                  <div className="flex items-center gap-1">
-                    <Users size={14} />
-                    <span>{course.totalStudents} học viên</span>
+                {/* Thông tin giảng viên và ngày */}
+                <div className="space-y-2 mb-4">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Users size={16} className="text-gray-400" />
+                    <span className="font-bold">Giảng viên:</span>
+                    <span>{course.instructorName}</span>
                   </div>
-                  <div className="flex items-center gap-1">
-                    <BookOpen size={14} />
-                    <span>{course.totalLessons} bài</span>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Calendar size={16} className="text-gray-400" />
+                    <span>Ngày xuất bản: {formatDate(course.publishedDate)}</span>
                   </div>
                 </div>
 
+                {/* Nút quản lý khóa học */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     navigate(`/teacher/course/${course.courseId}`);
                   }}
-                  className="w-full bg-cyan-600 text-white py-2 px-4 rounded-lg hover:bg-cyan-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-linear-to-r from-cyan-600 to-cyan-700 text-white py-3 px-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:from-cyan-700 hover:to-cyan-800 transition-all duration-300 shadow-md hover:shadow-lg"
                 >
-                  <Eye size={16} />
-                  Xem chi tiết
+                  <Eye size={18} />
+                  Quản lý khóa học
                 </button>
               </div>
             </div>
@@ -191,9 +163,11 @@ const TeacherCourses = () => {
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">📚</div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">
-              Không tìm thấy khóa học
+              {searchTerm ? 'Không tìm thấy khóa học' : 'Chưa có khóa học nào'}
             </h3>
-            <p className="text-gray-600">Hãy thử thay đổi từ khóa tìm kiếm</p>
+            <p className="text-gray-600">
+              {searchTerm ? 'Hãy thử thay đổi từ khóa tìm kiếm' : 'Bạn chưa tạo khóa học nào'}
+            </p>
           </div>
         )}
       </div>

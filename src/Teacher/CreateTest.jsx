@@ -7,7 +7,7 @@ const CreateTest = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  
+
   // Test Info
   const [testInfo, setTestInfo] = useState({
     title: '',
@@ -23,8 +23,7 @@ const CreateTest = () => {
   const [showQuestionBank, setShowQuestionBank] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // TODO: Lấy instructorId từ session/login
-  const instructorId = 1;
+  const instructorId = localStorage.getItem('id') || 1;
 
   useEffect(() => {
     fetchQuestions();
@@ -32,51 +31,16 @@ const CreateTest = () => {
 
   const fetchQuestions = async () => {
     try {
-      // API: GET /api/questions?courseId={courseId}&instructorId={instructorId}
-      // Response: QuestionDTO[] - xem QuestionBank.jsx
-      const response = await axios.get(`http://localhost:8080/api/questions?courseId=${courseId}&instructorId=${instructorId}`);
+      const response = await axios.get(`http://localhost:8080/api/questions`, {
+        params: {
+          courseId: courseId,
+          instructorId: instructorId
+        }
+      });
       setAllQuestions(response.data);
     } catch (error) {
       console.error('Error fetching questions:', error);
-      // Fallback mock data
-      setAllQuestions([
-        {
-          questionId: 1,
-          content: "Spring Boot là gì?",
-          courseId: parseInt(courseId),
-          instructorId: instructorId,
-          options: [
-            { optionId: 1, content: "Một framework Java", isCorrect: true },
-            { optionId: 2, content: "Một ngôn ngữ lập trình", isCorrect: false },
-            { optionId: 3, content: "Một database", isCorrect: false },
-            { optionId: 4, content: "Một IDE", isCorrect: false }
-          ]
-        },
-        {
-          questionId: 2,
-          content: "Annotation nào dùng để đánh dấu REST Controller?",
-          courseId: parseInt(courseId),
-          instructorId: instructorId,
-          options: [
-            { optionId: 5, content: "@Controller", isCorrect: false },
-            { optionId: 6, content: "@RestController", isCorrect: true },
-            { optionId: 7, content: "@Component", isCorrect: false },
-            { optionId: 8, content: "@Service", isCorrect: false }
-          ]
-        },
-        {
-          questionId: 3,
-          content: "JPA là viết tắt của gì?",
-          courseId: parseInt(courseId),
-          instructorId: instructorId,
-          options: [
-            { optionId: 9, content: "Java Persistence API", isCorrect: true },
-            { optionId: 10, content: "Java Programming API", isCorrect: false },
-            { optionId: 11, content: "Java Platform API", isCorrect: false },
-            { optionId: 12, content: "Java Protocol API", isCorrect: false }
-          ]
-        }
-      ]);
+      setAllQuestions([]);
     }
   };
 
@@ -111,17 +75,6 @@ const CreateTest = () => {
     setLoading(true);
     try {
       // Step 1: Tạo test
-      // API: POST /api/tests
-      // Body: CreateTestRequest
-      // {
-      //   courseId: number,
-      //   title: string,
-      //   description: string,
-      //   timeLimit: number,
-      //   passScore: number,
-      //   weight: number (double)
-      // }
-      // Response: { message: "Test created successfully", testId: number }
       const testResponse = await axios.post('http://localhost:8080/api/tests', {
         courseId: parseInt(courseId),
         title: testInfo.title,
@@ -134,14 +87,6 @@ const CreateTest = () => {
       const testId = testResponse.data.testId;
 
       // Step 2: Thêm câu hỏi vào test
-      // API: POST /api/tests/{testId}/questions
-      // Body: AddTestQuestionRequest
-      // {
-      //   courseId: number,
-      //   questionId: number,
-      //   instructorId: number
-      // }
-      // Response: { message: "Question added to test successfully" }
       for (const question of selectedQuestions) {
         await axios.post(`http://localhost:8080/api/tests/${testId}/questions`, {
           courseId: parseInt(courseId),
@@ -190,7 +135,7 @@ const CreateTest = () => {
               {/* Basic Info */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4">Thông tin cơ bản</h2>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -320,7 +265,7 @@ const CreateTest = () => {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-6">
                 <h3 className="font-bold text-gray-900 mb-4">Thông tin bài test</h3>
-                
+
                 <div className="space-y-3 mb-6 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Số câu hỏi:</span>
@@ -404,16 +349,15 @@ const CreateTest = () => {
                           Chọn
                         </button>
                       </div>
-                      
+
                       <div className="space-y-1">
                         {question.options.map((option) => (
                           <div
                             key={option.optionId}
-                            className={`text-sm p-2 rounded ${
-                              option.isCorrect ? 'bg-green-50 text-green-900' : 'text-gray-600'
-                            }`}
+                            className={`text-sm p-2 rounded ${option.correct ? 'bg-green-50 text-green-900' : 'text-gray-600'
+                              }`}
                           >
-                            {option.isCorrect && '✓ '}{option.content}
+                            {option.correct && '✓ '}{option.content}
                           </div>
                         ))}
                       </div>

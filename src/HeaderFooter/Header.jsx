@@ -57,6 +57,9 @@ const Header = () => {
                                 <NavLink to="/student/myCourse" className={navLinkClass}>
                                     Khoá học của tôi
                                 </NavLink>
+                                <NavLink to="/student/myCertificate" className={navLinkClass}>
+                                    Chứng chỉ của tôi
+                                </NavLink>
                             </>
                         )}
                     </nav>
@@ -72,8 +75,6 @@ const Header = () => {
                         <div className="hidden sm:block text-xs leading-tight">
                             <div className="font-semibold">{name}</div>
                             <div className="text-cyan-100">{role}</div>
-                            <div className="font-semibold">Tên</div>
-                            <div className="text-cyan-100">{isTeacher ? 'Giáo viên' : 'Học sinh'}</div>
                         </div>
                     </div>
 
